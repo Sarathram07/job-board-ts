@@ -3,11 +3,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../lib/formatter.ts";
 import { useJob } from "../lib/graphql/hooks/hook.js";
 
-// Define types for job data
-// interface Company {
-//   id: string;
-//   name: string;
-// }
+import type { ParamType } from "../lib/graphql/dataTypes/jobType.ts";
 
 // interface Job {
 //   id: string;
@@ -18,12 +14,8 @@ import { useJob } from "../lib/graphql/hooks/hook.js";
 //   [key: string]: any;
 // }
 
-type JobIdParam = {
-  [key: string]: string;
-};
-
 function JobPage(): React.ReactElement {
-  const { jobId } = useParams<JobIdParam>();
+  const { jobId } = useParams<ParamType>();
 
   // Guard: jobId could be undefined from useParams
   if (!jobId) {

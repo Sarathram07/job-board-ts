@@ -3,17 +3,17 @@
 // -------------------- Types --------------------
 type PageItem = number | "<" | ">";
 
-interface PaginationBarProps {
+type PaginationBarProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
-}
+  onPageChange: (args: number) => void;
+};
 
-interface PageButtonProps {
+type PageButtonProps = {
   page: PageItem;
   currentPage: number;
   onClick: () => void;
-}
+};
 
 // -------------------- PaginationBar Component --------------------
 function PaginationBar({

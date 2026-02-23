@@ -14,11 +14,21 @@ import {
   MESSAGE_ADDED_SUBSCRIPTION,
 } from "../query/messageQuery.js";
 
+import type {
+  GetAllJobsResponse,
+  GetJobResponse,
+} from "../dataTypes/jobType.js";
+
+import type { GetCompanyResponse } from "../dataTypes/companyType.js";
+
 // -------------------- COMPANY HOOK --------------------
 export function useCompany(companyId: string) {
-  const { data, loading, error } = useQuery<any>(GET_COMPANY_BY_ID, {
-    variables: { id: companyId },
-  });
+  const { data, loading, error } = useQuery<GetCompanyResponse>(
+    GET_COMPANY_BY_ID,
+    {
+      variables: { id: companyId },
+    },
+  );
 
   return {
     company: data?.company,
@@ -29,7 +39,7 @@ export function useCompany(companyId: string) {
 
 // -------------------- JOB HOOKS --------------------
 export function useJob(jobId: string) {
-  const { data, loading, error } = useQuery<any>(GET_JOB_BY_ID, {
+  const { data, loading, error } = useQuery<GetJobResponse>(GET_JOB_BY_ID, {
     variables: { id: jobId },
   });
 
@@ -41,13 +51,13 @@ export function useJob(jobId: string) {
 }
 
 export function useAllJobs(limit: number, offset: number) {
-  const { data, loading, error } = useQuery<any>(GET_ALL_JOBS, {
+  const { data, loading, error } = useQuery<GetAllJobsResponse>(GET_ALL_JOBS, {
     variables: { limit, offset },
     fetchPolicy: "network-only",
   });
 
   return {
-    jobs: data?.jobs ?? [],
+    jobs: data?.jobs,
     loading,
     error: Boolean(error),
   };

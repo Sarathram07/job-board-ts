@@ -2,6 +2,8 @@ import { useParams } from "react-router";
 import JobList from "../components/JobList";
 import { useCompany } from "../lib/graphql/hooks/hook.js";
 
+import type { ParamType } from "../lib/graphql/dataTypes/companyType.js";
+
 // -------------------- Types --------------------
 // interface Job {
 //   id: string | number;
@@ -19,14 +21,9 @@ import { useCompany } from "../lib/graphql/hooks/hook.js";
 //   jobs: Job[];
 // }
 
-type CompanyPageParams = {
-  //companyId: string | undefined;
-  [key: string]: string;
-};
-
 // -------------------- Component --------------------
 function CompanyPage() {
-  const { companyId } = useParams<CompanyPageParams>();
+  const { companyId } = useParams<ParamType>();
 
   if (!companyId) {
     console.warn("companyId param is required to fetch company");
@@ -42,6 +39,11 @@ function CompanyPage() {
 
   if (error || !company) {
     return <div className="has-text-danger">Data unavailable</div>;
+  }
+
+  if (!company?.jobs) {
+    console.warn("Job which is related to the company is not available.");
+    return;
   }
 
   return (

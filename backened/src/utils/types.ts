@@ -40,3 +40,31 @@ export interface MessageEntity {
 
   userDetails?: UserEntity; // virtual (optional)
 }
+
+// ------------------------------------------------unrelated_data---------------------------------------------------------------------------
+// export interface Company {
+//   __typename: string;
+//   id: string;
+//   name: string;
+//   // add other job fields here
+// }
+
+// export interface Job {
+//   __typename: string;
+//   id: string;
+//   title: string;
+//   description?: string;
+//   company: Company;
+//   date: string;
+//   // add other job fields here
+// }
+
+// export interface JobSubList {
+//   __typename: string;
+//   totalCount: number;
+//   items: Job[];
+// }
+
+// export type GetAllJobsResponse =  {
+//   jobs: Job[];
+// }

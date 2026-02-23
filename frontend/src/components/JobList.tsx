@@ -1,27 +1,16 @@
 import { Link } from "react-router-dom";
 import { formatDate } from "../lib/formatter.ts";
+import type { Job } from "../lib/graphql/dataTypes/jobType.ts";
 
-// Define TypeScript types
-interface Company {
-  name: string;
-}
-
-interface Job {
-  id: string | number;
-  title: string;
-  company?: Company;
-  date: string; // or Date, depending on what format formatDate expects
-}
-
-interface JobListProps {
+type JobListProps = {
   jobs: Job[];
-}
+};
 
-interface JobItemProps {
+type JobItemProps = {
   job: Job;
-}
+};
 
-function JobList({ jobs }: JobListProps) {
+function JobList({ jobs }: JobListProps): React.ReactElement {
   return (
     <ul className="box">
       {jobs.map((job) => (

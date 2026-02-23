@@ -41,7 +41,7 @@ function HomePage(): React.ReactElement {
   );
 
   const totalPages: number = jobs
-    ? Math.ceil(jobs.totalCount / JOBS_PER_PAGE)
+    ? Math.ceil(jobs?.totalCount / JOBS_PER_PAGE)
     : 0;
 
   if (loading) {
