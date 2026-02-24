@@ -17,9 +17,15 @@ import {
 import type {
   GetAllJobsResponse,
   GetJobResponse,
+  JobInput,
 } from "../dataTypes/jobType.js";
 
 import type { GetCompanyResponse } from "../dataTypes/companyType.js";
+
+import type {
+  GetAllMsgResponse,
+  GetMsgResponse,
+} from "../dataTypes/messageType.js";
 
 // -------------------- COMPANY HOOK --------------------
 export function useCompany(companyId: string) {
@@ -64,16 +70,11 @@ export function useAllJobs(limit: number, offset: number) {
 }
 
 export function useCreateJob() {
-  const [createJobMutation, result] = useMutation<any>(CREATE_NEW_JOB);
+  const [createJobMutation, result] =
+    useMutation<GetJobResponse>(CREATE_NEW_JOB);
   const { loading, error } = result;
 
-  const createNewJob = async ({
-    title,
-    description,
-  }: {
-    title: string;
-    description: string;
-  }) => {
+  const createNewJob = async ({ title, description }: JobInput) => {
     const body = { data: { title, description } };
 
     const response = await createJobMutation({
@@ -96,7 +97,7 @@ export function useCreateJob() {
 
 // -------------------- MESSAGE HOOKS --------------------
 export function useMessages() {
-  const { data } = useQuery<any>(GET_ALL_MESSAGES);
+  const { data } = useQuery<GetAllMsgResponse>(GET_ALL_MESSAGES);
 
   useSubscription<any>(MESSAGE_ADDED_SUBSCRIPTION, {
     onData: ({ client, data: result }) => {
@@ -115,10 +116,18 @@ export function useMessages() {
 }
 
 export function useAddMessage() {
-  const [newMessageMutation] = useMutation<any>(CREATE_NEW_MESSAGE);
+  const [newMessageMutation] = useMutation<GetMsgResponse>(CREATE_NEW_MESSAGE);
 
   const addMessage = async (text: string) => {
-    const response = await newMessageMutation({ variables: { text } });
+    const response = await newMessageMutation({
+      variables: { text },
+      // update: (cache, { data }) => {
+      //   const msg = data.message;
+      //   cache.updateQuery({ query: GET_ALL_MESSAGES }, (oldData) => {
+      //     return { messages: [...oldData.messages, msg] };
+      //   });
+      // },
+    });
     return response.data?.message;
   };
 

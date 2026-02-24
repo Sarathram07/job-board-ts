@@ -2,16 +2,10 @@ import { useState, type SubmitEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import { useCreateJob } from "../lib/graphql/hooks/hook.js";
 
-type JobInput = {
-  title: string;
-  description: string;
-};
-
-type CreatedJob = {
-  id: string;
-  title: string;
-  description: string;
-};
+import type {
+  JobInput,
+  Job as CreatedJob,
+} from "../lib/graphql/dataTypes/jobType.js";
 
 function CreateJobPage(): React.ReactElement {
   const navigate = useNavigate();
@@ -24,9 +18,12 @@ function CreateJobPage(): React.ReactElement {
     event.preventDefault();
 
     const contents: JobInput = { title, description };
-    const createdJob: CreatedJob = await createNewJob(contents);
-
+    const createdJob: CreatedJob | undefined = await createNewJob(contents);
     console.log("job created:", createdJob);
+    if (!createdJob) {
+      console.warn("problem in creating new Job");
+      return;
+    }
     navigate(`/jobs/${createdJob.id}`);
   };
 

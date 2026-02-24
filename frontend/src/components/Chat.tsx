@@ -6,11 +6,7 @@ import MessageList from "./MessageList.tsx";
 import { useMessages, useAddMessage } from "../lib/graphql/hooks/hook";
 
 import "../navbar.css";
-
-type User = {
-  id: string;
-  name: string;
-};
+import type { User } from "../lib/graphql/dataTypes/userType.ts";
 
 type ChatProps = {
   user: User;
@@ -20,16 +16,8 @@ type ChatProps = {
 const Chat = ({ user }: ChatProps) => {
   const navigate = useNavigate();
 
-  const { messages } = useMessages();
+  const { messages } = useMessages(); // messages = // Array(Message)
   const { addMessage } = useAddMessage();
-
-  //   const { messages } = useMessages() as {
-  //     messages: Array<any>; // Replace `any` with your Message type if available
-  //   };
-
-  //   const { addMessage } = useAddMessage() as {
-  //     addMessage: (text: string) => Promise<any>; // Replace `any` with your Message type
-  //   };
 
   const handleSend = async (text: string): Promise<void> => {
     const message = await addMessage(text);

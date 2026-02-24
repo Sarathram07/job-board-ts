@@ -23,6 +23,12 @@ export type GetJobResponse = {
   job: Job;
 };
 
+export type JobInput = {
+  title: string;
+  description: string;
+};
+
+
 export type ParamType = {
   [key: string]: string;
 };

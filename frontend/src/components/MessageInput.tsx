@@ -5,15 +5,15 @@ type MessageInputProps = {
 };
 
 function MessageInput({ onSend }: MessageInputProps) {
-  const handleKeyDown = (
+  const handleKeyDown = async (
     event: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  ): Promise<void> => {
     if (event.key === "Enter") {
       //   const input = event.currentTarget;
       //   const value = input.value.trim();
       //   if (!value) return;
 
-      onSend(event.currentTarget.value);
+      await onSend(event.currentTarget.value);
       event.currentTarget.value = "";
     }
   };
