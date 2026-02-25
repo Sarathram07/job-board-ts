@@ -2,9 +2,9 @@
 import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
+// import dotenv from "dotenv";
+// import path from "path";
+// import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware as apolloMiddleware } from "@apollo/server/express4";
@@ -26,12 +26,14 @@ import { getUserById } from "./controllers/UserController.ts";
 import { createCompanyLoader } from "./controllers/CompanyController.ts";
 
 // -----------------------------------------------------EXPRESS_CONFIG---------------------------------------------------------------
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-dotenv.config({
-  path: path.join(__dirname, "backend_config.env"),
-});
+// dotenv.config({
+//   path: path.join(__dirname, "backend_config.env"),
+// });
+
+// console.log(process.env);
 
 const app = express();
 
@@ -49,7 +51,7 @@ app.use(authMiddleware);
 app.use("/login", handleLogin);
 
 // -----------------------------------------------------APOLLO_SERVER---------------------------------------------------------------
-const typeDefs = await readFile("./graphApi/schema.graphql", "utf-8");
+const typeDefs = await readFile("./src/graphApi/schema.graphql", "utf-8");
 
 interface Context {
   user?: any;

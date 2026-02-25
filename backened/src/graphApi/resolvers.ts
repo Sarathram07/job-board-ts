@@ -1,9 +1,7 @@
 import { PubSub } from "graphql-subscriptions";
 import type { IResolvers } from "@graphql-tools/utils";
 
-import {
-  getCompanyByID,
-} from "../controllers/CompanyController.js";
+import { getCompanyByID } from "../controllers/CompanyController.ts";
 
 import {
   createJob,
@@ -13,12 +11,12 @@ import {
   getJobs,
   getTotalJobCount,
   updateJobByID,
-} from "../controllers/JobController.js";
+} from "../controllers/JobController.ts";
 
 import {
   createMessage,
   getAllMessages,
-} from "../controllers/MessageController.js";
+} from "../controllers/MessageController.ts";
 
 import { extractDate } from "../utils/convertion.js";
 
@@ -27,10 +25,6 @@ import {
   handleCompanyError,
   handleJobError,
 } from "../utils/errorHandler.ts";
-
-/* ================================
-   Types
-================================ */
 
 interface User {
   id: string;
@@ -45,55 +39,54 @@ interface GraphQLContext {
   };
 }
 
-/* -------- Args Types -------- */
+// interface ArgsMap {
+//   jobs: JobsArgs;
+//   job: JobArgs;
+// }
 
-interface JobsArgs {
+type JobsArgs = {
   limit?: number;
   offset?: number;
-}
+};
 
-interface JobArgs {
+type JobArgs = {
   id: string;
-}
+};
 
-interface CompanyArgs {
+type CompanyArgs = {
   id: string;
-}
+};
 
-interface CreateJobInput {
+type CreateJobInput = {
   title: string;
   description: string;
-}
+};
 
-interface UpdateJobInput {
+type UpdateJobInput = {
   id: string;
   title: string;
   description: string;
-}
-
-/* ================================
-   PubSub
-================================ */
+};
+// --------------------------------------------------------------------------------------------------------------------------
 
 const pubSub = new PubSub();
 
-/* ================================
-   Resolvers
-================================ */
+//IResolvers<TRoot, TContext, TArgs = any>
+// TRoot → type of the parent/root object of the resolver (what _root refers to).
+// TContext → type of the GraphQL context object passed to every resolver.
+// TArgs → type of the args object that the resolver receives for that field.
 
-export const resolvers: IResolvers<
-  unknown,
-  GraphQLContext
-> = {
+//TRoot = unknown → _root can be anything.
+// This is often used when you don’t care about the parent object type (or want to type it individually for each resolver).
+//TArgs - didn’t specify, so it defaults to any. That’s why: we can explicitly type/provide args for each resolver
+
+//const resolvers: IResolvers<unknown, GraphQLContext, MyArgsMap>
+// _args is {} because the GraphQL schema does not define any arguments for date or company.
+export const resolvers: IResolvers<unknown, GraphQLContext> = {
   Job: {
-    date: (job: { createdAt: string }): string =>
-      extractDate(job.createdAt),
+    date: (job: { createdAt: Date }): string => extractDate(job.createdAt),
 
-    company: (
-      job: { companyId: string },
-      _args,
-      { companyLoader }
-    ) => {
+    company: (job: { companyId: string }, _args, { companyLoader }) => {
       return companyLoader.load(job.companyId);
     },
   },
@@ -141,11 +134,7 @@ export const resolvers: IResolvers<
   },
 
   Mutation: {
-    createJob: (
-      _root,
-      { input }: { input: CreateJobInput },
-      context
-    ) => {
+    createJob: (_root, { input }: { input: CreateJobInput }, context) => {
       const user = requireAuth(context);
       const { title, description } = input;
 
@@ -156,11 +145,7 @@ export const resolvers: IResolvers<
       });
     },
 
-    addMessage: async (
-      _root,
-      { text }: { text: string },
-      { user }
-    ) => {
+    addMessage: async (_root, { text }: { text: string }, { user }) => {
       if (!user) {
         handleAuthError("Un-authorized Access");
       }
@@ -180,20 +165,11 @@ export const resolvers: IResolvers<
       return deleteJobByID(id, user.companyId);
     },
 
-    updateJob: (
-      _root,
-      { input }: { input: UpdateJobInput },
-      context
-    ) => {
+    updateJob: (_root, { input }: { input: UpdateJobInput }, context) => {
       const user = requireAuth(context);
       const { id, title, description } = input;
 
-      return updateJobByID(
-        id,
-        user.companyId,
-        title,
-        description
-      );
+      return updateJobByID(id, user.companyId, title, description);
     },
   },
 
@@ -202,21 +178,15 @@ export const resolvers: IResolvers<
       subscribe: (_root, _args, context) => {
         requireAuth(context);
 
-        return pubSub.asyncIterableIterator(
-          "NEW_MESSAGE_ADDED"
-        );
+        return pubSub.asyncIterableIterator("NEW_MESSAGE_ADDED");
       },
     },
   },
 };
 
-/* ================================
-   Auth Helper
-================================ */
+// --------------------------------------------------------------------------------------------------------------------------
 
-const requireAuth = (
-  context: GraphQLContext
-): User => {
+const requireAuth = (context: GraphQLContext): User => {
   if (!context?.user) {
     handleAuthError("Un-authorized Access");
   }

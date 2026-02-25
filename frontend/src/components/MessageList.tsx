@@ -16,7 +16,7 @@ export interface User {
 
 // Props for MessageList
 interface MessageListProps {
-  user: User;
+  user: User | null;
   messages: Message[];
 }
 
@@ -50,7 +50,7 @@ function MessageList({ user, messages }: MessageListProps) {
 
 // Props for MessageRow
 interface MessageRowProps {
-  user: User;
+  user: User | null;
   message: Message;
 }
 
@@ -58,7 +58,9 @@ function MessageRow({ user, message }: MessageRowProps) {
   return (
     <tr>
       <td className="py-1">
-        <span className={message.user === user.name ? "tag is-primary" : "tag"}>
+        <span
+          className={message.user === user?.name ? "tag is-primary" : "tag"}
+        >
           {message.user}
         </span>
       </td>

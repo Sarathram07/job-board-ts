@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 //   useUnifiedTopology: true,
 // };
 
-const URL: string | undefined = process.env.DB_LOCAL_URL;
+const URL: string = process.env.DB_LOCAL_URL!;
 
 export const connectDataBase = () => {
   console.log("DB_LOCAL_URL:", URL);

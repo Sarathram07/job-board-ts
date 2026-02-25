@@ -1,5 +1,6 @@
-import { connectDataBase } from "./connection/conn.js";
-import { httpServer as mainServer } from "./app.js";
+import "./connection/propertyConfig.ts";
+import { connectDataBase } from "./connection/conn.ts";
+import { httpServer as mainServer } from "./app.ts";
 import { Server } from "http"; // Node.js type for the server
 
 // Connect to the database

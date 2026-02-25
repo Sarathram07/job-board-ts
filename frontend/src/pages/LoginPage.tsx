@@ -2,14 +2,6 @@ import { useState, type SubmitEvent, type ChangeEvent } from "react";
 import { login } from "../lib/auth";
 import type { User } from "../lib/graphql/dataTypes/userType";
 
-// Define the shape of the user object returned by login
-// interface User {
-//    id: string;
-//   name: string;
-//    email: string;
-//   [key: string]: string;
-// }
-
 type LoginProps = User | null;
 
 type LoginPageProps = {

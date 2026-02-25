@@ -9,7 +9,7 @@ import "../navbar.css";
 import type { User } from "../lib/graphql/dataTypes/userType.ts";
 
 type ChatProps = {
-  user: User;
+  user: User | null;
 };
 
 //const Chat: React.FC<ChatProps> = ({ user }: ChatProps)
@@ -37,7 +37,7 @@ const Chat = ({ user }: ChatProps) => {
       <ChatNavBar />
       <section className="section">
         <div className="container">
-          <h1 className="title is-4">{`Chatting as ${user.name}`}</h1>
+          <h1 className="title is-4">{`Chatting as ${user?.name}`}</h1>
           <MessageList user={user} messages={messages} />
           <MessageInput onSend={handleSend} />
           <button
